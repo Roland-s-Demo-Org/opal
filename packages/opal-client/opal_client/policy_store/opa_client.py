@@ -270,13 +270,14 @@ class OpaStaticDataCache:
 
     def set(self, path, data):
         if not path or path == "/":
-            assert isinstance(data, dict), ValueError(
-                "Setting root document must be a dict"
-            )
+            if not isinstance(data, dict):
+                raise ValueError(
+                    "Setting root document must be a dict"
+                )
             self._root_data = data.copy()
         else:
             # This would overwrite already existing paths
-            dpath.new(self._root_data, path, data)
+           dpath.new(self._root_data, path, data)
 
     def patch(self, path, data: List[JSONPatchAction]):
         for i, _ in enumerate(data):

@@ -120,7 +120,7 @@ class ScopesService:
         req_time: datetime.datetime = None,
     ):
         if scope is None:
-            assert scope_id, ValueError("scope_id not set for sync_scope")
+            if not scope_id: raise AssertionError("scope_id not set for sync_scope")
             scope = await self._scopes.get(scope_id)
 
         with tracer.trace("scopes_service.sync_scope", resource=scope.scope_id):

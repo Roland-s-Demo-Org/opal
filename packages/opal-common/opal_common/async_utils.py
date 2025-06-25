@@ -61,7 +61,8 @@ class TakeANumberQueue:
         self._logger = logger
 
     async def take_a_number(self) -> Number:
-        assert self._queue is not None, "Queue not initialized"
+        if self._queue is None:
+            raise AssertionError("Queue not initialized")
         n = TakeANumberQueue.Number()
         await self._queue.put(n)
         return n
