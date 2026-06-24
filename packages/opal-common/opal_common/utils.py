@@ -20,6 +20,8 @@ def get_filepaths_with_glob(root_path: str, file_regex: str):
 def hash_file(tmp_file_path):
     BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
     sha256_hash = hashlib.sha256()
+    if ".." in str(tmp_file_path):
+        raise Exception("Invalid file path")
     with open(tmp_file_path, "rb") as file:
         while True:
             data = file.read(BUF_SIZE)
