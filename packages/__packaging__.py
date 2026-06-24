@@ -30,7 +30,11 @@ def get_install_requires(here):
     packages you need to run OPAL (and are thus different from a
     "requirements.txt" file).
     """
-    with open(os.path.join(here, "requires.txt")) as fp:
+    base_real = os.path.realpath(here)
+    target_real = os.path.realpath(os.path.join(here, "requires.txt"))
+    if os.path.commonpath([base_real, target_real]) != base_real:
+        raise Exception("Invalid file path")
+    with open(target_real) as fp:
         return [
             line.strip() for line in fp.read().splitlines() if not line.startswith("#")
         ]
