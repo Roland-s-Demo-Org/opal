@@ -1,7 +1,7 @@
 # BUILD STAGE ---------------------------------------
 # split this stage to save time and reduce image size
 # ---------------------------------------------------
-FROM python:3.10-bookworm AS build-stage
+FROM python:3.10-bookworm@sha256:f72a86806f92fe13a49f49aeca1db0b19ea5cf4a0470b842a01b0e14314945b8 AS build-stage
 # from now on, work in the /app directory
 WORKDIR /app/
 # Layer dependency install (for caching)
@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r ./
 
 # COMMON IMAGE --------------------------------------
 # ---------------------------------------------------
-FROM python:3.10-slim-bookworm AS common
+FROM python:3.10-slim-bookworm@sha256:5be5aaecb962a41567bc8041f1e9e3432cb085b037fe057f9a562630b2e4b370 AS common
 
 # copy libraries from build stage (This won't copy redundant libraries we used in build-stage)
 # also remove the default python site-packages that has older versions of packages that won't be overridden
@@ -80,7 +80,7 @@ VOLUME /opal/backup
 
 # IMAGE to extract OPA from official image ----------
 # ---------------------------------------------------
-FROM alpine:latest AS opa-extractor
+FROM alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS opa-extractor
 USER root
 
 RUN apk update && apk add skopeo tar
@@ -119,7 +119,7 @@ USER opal
 # Extract the Cedar Agent binary from the existing image
 # CEDAR AGENT DOWNLOAD STAGE -----------------------
 # Stage to locate and extract the cedar-agent binary
-FROM permitio/cedar-agent:0.2.0 AS cedar-extractor
+FROM permitio/cedar-agent:0.2.0@sha256:a25677e38eef2bc137997075dd2d54947d94cba64edc4d82f8623b8c50c162a1 AS cedar-extractor
 
 FROM client-standalone AS client-cedar
 
